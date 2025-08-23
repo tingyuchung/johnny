@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Johnny & Coco — 小遊戲</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="ui">
+    <div id="topbar" class="hidden">
+      <div id="hearts"></div>
+      <div id="timer" class="pixel-text"></div>
+    </div>
+
+  <div id="dialog" class="hidden">
+    <div class="inner pixel-border">
+      <div id="dialog-text" class="body"></div>
+      <button id="dialog-ok" class="pixel-btn">OK</button>
+    </div>
+  </div>
+  <div id="question-modal" class="hidden">
+    <div class="inner pixel-border">
+      <div id="q-title" class="title"></div>
+      <div id="q-options" class="pixel-options"></div>
+    </div>
+  </div>
+  <div id="retry-modal" class="hidden">
+    <div class="inner pixel-border">
+      <div class="title">你撞到小男孩了！</div>
+      <div class="body">要重玩一遍嗎？</div>
+      <div style="margin-top:10px">
+        <button id="retry-yes" class="pixel-btn">重玩</button>
+        <button id="retry-no" class="pixel-btn">取消</button>
+      </div>
+    </div>
+  </div>
+  <div id="start-overlay">
+    <div class="start-title">Coco &amp; Johnny's Magical Journey</div>
+    <pre id="start-menu" class="start-menu"></pre>
+  </div>
+  <!-- legacy ending overlay removed -->
+  <!-- removed ending modal per new spec -->
+  <!-- removed timeup modal per new spec -->
+</div>
+<canvas id="game" width="1024" height="480"></canvas>
+<script src="main.js"></script>
+</body>
+</html>

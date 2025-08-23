@@ -1,0 +1,286 @@
+*{box-sizing:border-box}
+/* Local Unifont (fallbacks if some formats missing). Place font files in /unifont */
+@font-face{
+  font-family:'UnifontLocal';
+  src:
+    url('unifont/unifont.woff2') format('woff2'),
+    url('unifont/unifont.woff') format('woff'),
+    url('unifont/unifont.ttf') format('truetype'),
+    url('unifont/unifont.otf') format('opentype');
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+/* Local Zpix Chinese pixel font */
+@font-face{
+  font-family:'ZpixLocal';
+  src:
+    url('fonts/zpix.woff2') format('woff2'),
+    url('fonts/zpix.woff') format('woff');
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+/* Zpix: Chinese pixel bitmap webfont (CDN) */
+@font-face{
+  font-family:'Zpix';
+  src:
+    url('https://cdn.jsdelivr.net/gh/SolidZORO/zpix-pixel-font@1.2.0/dist/zpix.woff2') format('woff2'),
+    url('https://cdn.jsdelivr.net/gh/SolidZORO/zpix-pixel-font@1.2.0/dist/zpix.woff') format('woff');
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+body{margin:0;font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace;background:linear-gradient(#a7eaff,#f0f8ff);display:flex;align-items:center;justify-content:center;min-height:100vh;-webkit-font-smoothing:none;text-rendering:optimizeSpeed}
+#game{border:6px solid #222;border-radius:8px;display:block;background:#86d0ff}
+#ui{position:absolute;top:8px;left:8px;z-index:20;width:100%}
+#topbar{display:flex;align-items:center;gap:12px;padding:8px 12px}
+#timer{margin-left:8px;color:#111}
+
+#ui, #ui *{font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; image-rendering: pixelated; -webkit-font-smoothing:none; text-rendering:optimizeSpeed}
+
+/* Pixel UI base */
+.pixel-panel{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+  background:#fdfdfd; padding:18px; max-width:90%; width:520px; image-rendering: pixelated;}
+.pixel-border{position:relative}
+.pixel-border:before{content:""; position:absolute; inset:0; box-shadow:
+  0 0 0 4px #000,
+  0 0 0 8px #fff,
+  0 0 0 12px #000;
+  pointer-events:none}
+.pixel-title{font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:16px; color:#111; margin-bottom:12px}
+.pixel-text{font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:12px; line-height:1.6; color:#222}
+.pixel-btn{font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:12px; padding:10px 14px; background:#fff; border:4px solid #000; box-shadow:4px 4px 0 #000; cursor:pointer; margin-top:10px}
+.pixel-btn:active{transform:translate(2px,2px); box-shadow:2px 2px 0 #000}
+.pixel-btn.selected{font-weight:700; outline:2px solid #000}
+.pixel-options button{display:block; width:100%; margin:8px 0}
+
+#dialog, #question-modal, #retry-modal, #ending-overlay{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);}
+#dialog .inner, #question-modal .inner, #retry-modal .inner, #ending-overlay .inner{background:#fdfdfd; padding:18px}
+#dialog .inner, #question-modal .inner, #retry-modal .inner, #ending-overlay .inner{image-rendering:pixelated}
+#dialog .inner.pixel-border:before, #question-modal .inner.pixel-border:before, #retry-modal .inner.pixel-border:before, #ending-overlay .inner.pixel-border:before{content:""}
+#dialog{z-index:60}
+#dialog .title, #question-modal .title{font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:16px; margin-bottom:12px}
+#dialog .body, #question-modal .body{font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:12px; line-height:1.6}
+
+/* Controls dialog styling - similar to start menu */
+#dialog.controls-dialog .inner{background:transparent; padding:0; box-shadow:none; text-align:center}
+#dialog.controls-dialog .inner:before{display:none}
+#dialog.controls-dialog #dialog-text{color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:32px; line-height:40px; text-align:center; white-space:pre-line; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:300px}
+#dialog.controls-dialog #dialog-text .controls-title{font-size:36px; font-weight:700; color:#fff; text-shadow:2px 2px 0 #000; margin-bottom:3px; display:block}
+#dialog.controls-dialog #dialog-ok{background:transparent; border:none; box-shadow:none; color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:32px; padding:0; margin:0; cursor:pointer; text-decoration:underline; align-self:flex-start; margin-left:40px}
+
+/* Coco dialog options styling */
+#dialog.coco-dialog .inner{background:transparent; padding:0; box-shadow:none; text-align:center}
+#dialog.coco-dialog .inner:before{display:none}
+#dialog.coco-dialog #dialog-text{color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:28px; line-height:36px; text-align:center; white-space:pre-line; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:auto; margin-bottom:0}
+#dialog.coco-dialog #dialog-ok{background:transparent; border:none; box-shadow:none; color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:28px; padding:0; margin:0; cursor:pointer; text-decoration:underline; margin-top:8px; text-align:center; animation:arrowBlink 1.5s ease-in-out infinite}
+
+/* Coco intro dialog styling - same as options for consistency */
+#dialog.coco-intro .inner{background:transparent; padding:0; box-shadow:none; text-align:center}
+#dialog.coco-intro .inner:before{display:none}
+#dialog.coco-intro #dialog-text{color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:28px; line-height:36px; text-align:center; white-space:pre-line; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:auto; margin-bottom:0}
+#dialog.coco-intro #dialog-ok{background:transparent; border:none; box-shadow:none; color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:28px; padding:0; margin:0; cursor:pointer; text-decoration:underline; margin-top:8px; text-align:center; animation:arrowBlink 1.5s ease-in-out infinite}
+#q-options{margin-top:10px}
+#q-options button{font-family:'Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:12px; padding:10px 14px; background:#fff; border:4px solid #000; box-shadow:4px 4px 0 #000; cursor:pointer}
+#q-options button:active{transform:translate(2px,2px); box-shadow:2px 2px 0 #000}
+#dialog-ok{font-family:'Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:12px; padding:10px 14px; background:#fff; border:4px solid #000; box-shadow:4px 4px 0 #000; cursor:pointer}
+
+/* Question modal styling - consistent with coco-dialog design */
+#question-modal.coco-dialog .inner{background:transparent; padding:0; box-shadow:none; text-align:center}
+#question-modal.coco-dialog .inner:before{display:none}
+#question-modal.coco-dialog #q-title{color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:28px; line-height:36px; text-align:center; margin-bottom:20px}
+#question-modal.coco-dialog #q-options{color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:24px; line-height:32px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:15px}
+#question-modal.coco-dialog #q-options button{background:transparent; border:none; box-shadow:none; color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:24px; padding:8px 16px; cursor:pointer; text-decoration:underline; transition:all 0.2s ease}
+#question-modal.coco-dialog #q-options button:hover{transform:scale(1.05); text-shadow:3px 3px 0 #000}
+#question-modal.coco-dialog #q-options button.selected{color:#ffffff; text-shadow:2px 2px 0 #000; transform:scale(1.1)}
+
+/* Question options styling - consistent with other options */
+.question-option {
+  color: #fff;
+  text-shadow: 2px 2px 0 #000;
+  font-family: 'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.2s ease;
+  margin: 0;
+}
+
+.question-option:hover {
+  transform: scale(1.05);
+  text-shadow: 3px 3px 0 #000;
+}
+
+.question-option.selected {
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000;
+  transform: scale(1.1);
+}
+.hidden{display:none}
+
+/* Start overlay */
+#start-overlay{position:fixed; inset:0; z-index:30; display:flex; flex-direction:column; align-items:center; justify-content:center; background-size:cover; background-position:center}
+#start-overlay .start-title{position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:36px; font-weight:700; text-align:center; margin-top:-40px; white-space:nowrap}
+#start-overlay .start-menu{position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#fff; text-shadow:2px 2px 0 #000; font-family:'ZpixLocal','Zpix','UnifontLocal','Unifont','Press Start 2P', monospace; font-size:32px; line-height:40px; text-align:center; margin:0; cursor:pointer; margin-top:40px}
+@keyframes blink{0%{opacity:1}50%{opacity:0.35}100%{opacity:1}}
+
+/* Arrow blinking animation for dialog */
+@keyframes arrowBlink{
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.9); }
+}
+
+/* Classic RPG cursor shake animation - more subtle and authentic */
+@keyframes rpgCursorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
+}
+
+/* Enhanced RPG cursor effects with multiple animation variations */
+@keyframes rpgCursorPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes rpgCursorGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+/* Slow blink animation for > < symbols */
+@keyframes symbolBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Main RPG cursor class with multiple effects */
+.rpg-cursor {
+  animation: 
+    rpgCursorShake 0.8s ease-in-out infinite,
+    rpgCursorPulse 1.6s ease-in-out infinite;
+  display: inline-block;
+  text-shadow: 2px 2px 0 #000;
+  position: relative;
+}
+
+/* Alternative cursor style for different menu types */
+.rpg-cursor-alternate {
+  animation: 
+    rpgCursorShake 1.2s ease-in-out infinite,
+    rpgCursorGlow 2.0s ease-in-out infinite;
+  display: inline-block;
+  text-shadow: 2px 2px 0 #000;
+  color: #ffffff; /* White for selected options */
+}
+
+/* Cursor for battle/action menus */
+.rpg-cursor-battle {
+  animation: 
+    rpgCursorShake 0.6s ease-in-out infinite;
+  display: inline-block;
+  text-shadow: 2px 2px 0 #000;
+  color: #ffffff; /* White for selected options */
+}
+
+/* Start menu classic RPG cursor effects */
+.start-menu .option-selected {
+  animation: rpgCursorShake 0.8s ease-in-out infinite;
+  display: inline-block;
+  text-shadow: 2px 2px 0 #000;
+  color: #ffffff; /* White for selected options */
+}
+
+/* Retro pixel cursor style */
+.rpg-cursor-pixel {
+  animation: rpgCursorShake 1.0s ease-in-out infinite;
+  display: inline-block;
+  text-shadow: 2px 2px 0 #000;
+  color: #ffffff; /* White for selected options */
+  font-weight: bold;
+}
+
+/* Apply retro pixel cursor to selected options */
+.option-selected {
+  animation: 
+    rpgCursorShake 0.8s ease-in-out infinite,
+    rpgCursorPulse 1.6s ease-in-out infinite;
+  display: inline-block;
+  text-shadow: 2px 2px 0 #000;
+  position: relative;
+  color: #ffffff; /* White for selected options */
+  font-weight: bold;
+}
+
+/* Style for > < symbols with slow blink effect */
+.option-selected > .symbol-left,
+.option-selected > .symbol-right {
+  animation: symbolBlink 1.5s ease-in-out infinite;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000;
+  font-weight: bold;
+}
+
+/* Classic RPG cursor variations */
+.rpg-cursor-classic {
+  animation: rpgCursorShake 0.6s ease-in-out infinite;
+  color: #ffffff; /* White for selected options */
+  text-shadow: 2px 2px 0 #000;
+}
+
+.rpg-cursor-magical {
+  animation: 
+    rpgCursorShake 1.0s ease-in-out infinite,
+    rpgCursorGlow 2.0s ease-in-out infinite;
+  color: #ffffff; /* White for selected options */
+  text-shadow: 
+    2px 2px 0 #000,
+    0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.rpg-cursor-legendary {
+  animation: 
+    rpgCursorShake 0.7s ease-in-out infinite,
+    rpgCursorPulse 1.8s ease-in-out infinite;
+  color: #ffffff; /* White for selected options */
+  text-shadow: 
+    2px 2px 0 #000,
+    0 0 12px rgba(255, 255, 255, 0.9);
+}
+
+/* Cursor for different game states */
+.rpg-cursor-menu {
+  animation: 
+    rpgCursorShake 0.8s ease-in-out infinite;
+  color: #ffffff; /* White for selected options */
+}
+
+.rpg-cursor-inventory {
+  animation: 
+    rpgCursorShake 0.9s ease-in-out infinite;
+  color: #ffffff; /* White for selected options */
+}
+
+/* Enhanced arrow cursor with different themes */
+.rpg-cursor-arrow.rpg-cursor-classic::before,
+.rpg-cursor-arrow.rpg-cursor-classic::after {
+  color: #ffffff; /* White for arrows */
+}
+
+.rpg-cursor-arrow.rpg-cursor-magical::before,
+.rpg-cursor-arrow.rpg-cursor-magical::after {
+  color: #ffffff; /* White for arrows */
+  animation: rpgCursorGlow 1.5s ease-in-out infinite;
+}
+
+.rpg-cursor-arrow.rpg-cursor-legendary::before,
+.rpg-cursor-arrow.rpg-cursor-legendary::after {
+  color: #ffffff; /* White for arrows */
+  animation: rpgCursorPulse 1.8s ease-in-out infinite;
+}
+
+
